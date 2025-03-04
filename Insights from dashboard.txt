@@ -1,0 +1,19 @@
+Insights from dashboard
+
+1. In 2004, the total Sum of Profit reached its peak at $1.81 million, followed by 2003 at $1.32 million and 2005 at $0.69 million. 
+
+2. Classic Cars led with the highest Sales Sum at $3.85 million, a remarkable 1,944% higher than Trains, which had the lowest Sales Sum at $18.8 million. Classic Cars contributed approximately 40% of Total Sales. 
+
+3. Over the three years, Classic and Vintage Cars accounted for 62% of the total orders, while Trains recorded the fewest orders. 
+
+4. November saw the highest sales and profits in both 2003 and 2005, with steady sales in other months. 
+
+5. The USA had the highest sales across all countries.
+
+6. The average order value is around $29.5k, with the $20k-$40k range having the highest order count (135), followed by orders under $20k, between $40k-$50k, and over $50k.
+
+7. Approximately 93% of orders were shipped successfully, with an average shipping time of 3.6 days after order placement.
+
+8. Quarterly growth (QoQ%) was negative in the first quarter across all years, due to higher sales growth in the fourth quarter.
+
+9. The 2001 Ferrari Enzo received the most orders, while the 1952 Alpine Renault 1300 proved to be the most profitable product.
