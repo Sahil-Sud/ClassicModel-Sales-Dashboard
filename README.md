@@ -9,26 +9,26 @@ Aim: The goal of the capstone project is to design and implement a BI solution u
 SQL Queries: - 
 
  1. Revenue from each product by product-code
-
+```sql
 select productcode,sum(quantityOrdered * priceEach) as revenue_generated_per_product 
 from orderdetails group by productcode;
-
+```
 2. Revenue from each product by product-name
-
+```sql
 select products.productcode,products.productname,sum(quantityOrdered * priceEach) as revenue_generated_per_product 
 from orderdetails
 inner join products using(productcode)
 group by productcode;
-
+```
 3. Products never sold by Axon
-
+```sql
 select products.productCode, products.productname
 from products
 left join orderdetails using(productcode)
 where orderdetails.productCode is null;
-
+```
 4. Product wise Average Selling Price, Average Discount, Average Profit and Average Profit Percentage.
-
+```sql
 select productname,buyprice as cost_price,msrp as markup_price, 
 sum(quantityordered * priceeach) / sum(quantityOrdered) as avg_selling_price, 
 msrp - (sum(quantityordered * priceeach) / sum(quantityOrdered))  as avg_discount, 
@@ -38,28 +38,28 @@ from orderdetails
 inner join products using(productcode)
 group by productCode
 order by avg_profit_percentage desc;
-
+```
 5. Quatity sold, Quantity left Product_Wise
-
+```sql
 select products.productname, quantityInStock, sum(quantityOrdered) quantity_sold, 
 quantityInStock - sum(quantityOrdered) stock_left
 from products inner join orderdetails using(productcode)
 group by productCode;
-
+```
 6. Order Status 
-
-SELECT 
+```sql
+select 
 	count(*) as total_orders,
-    SUM(CASE WHEN status = 'Shipped' THEN 1 ELSE 0 END) AS Shipped,
-    SUM(CASE WHEN status = 'Cancelled' THEN 1 ELSE 0 END) AS Cancelled,
-    SUM(CASE WHEN status = 'Resolved' THEN 1 ELSE 0 END) AS Resolved,
-    SUM(CASE WHEN status = 'On Hold' THEN 1 ELSE 0 END) AS On_Hold,
-    SUM(CASE WHEN status = 'In Process' THEN 1 ELSE 0 END) AS In_Process,
-    SUM(CASE WHEN status = 'Disputed' THEN 1 ELSE 0 END) AS Disputed
-FROM orders;
-
+    sum(case when status = 'shipped' then 1 else 0 end) as shipped,
+    sum(case when status = 'cancelled' then 1 else 0 end) as cancelled,
+    sum(case when status = 'resolved' then 1 else 0 end) as resolved,
+    sum(case when status = 'on hold' then 1 else 0 end) as on_hold,
+    sum(case when status = 'in process' then 1 else 0 end) as in_process,
+    sum(case when status = 'disputed' then 1 else 0 end) as disputed
+from orders;
+```
 7. Classifing Shipping Speed
-
+```sql
 select ordernumber, 
        orderdate, 
        datediff(shippeddate, orderdate) as dispacted_in, 
@@ -70,25 +70,25 @@ select ordernumber,
        end as dispatch_category
 from orders 
 where status = "shipped";
-
+```
 8.  Total Orders placed by Customers having status "shipped" arranged highest to lowest 
-
+```sql
 select orders.customernumber, customers.customername, sum(case when status = 'shipped' then 1 else 0 end) as order_counts 
 from orders join customers using(customernumber)
 group by customerNumber
 order by 3 desc;
-
+```
 9. Customers details regarding total order placed, transaction worth having status "shipped" arranged highest to lowest 
-
+```sql
 select orders.customernumber, customers.customername, sum(case when status = 'shipped' then 1 else 0 end) as order_counts, round(sum(quantityordered * priceeach)) worth 
 from orders 
 join customers using(customernumber)
 join orderdetails using(ordernumber)
 group by customerNumber
 order by 3 desc, 4 desc;
-
+```
  10. Top 3 best-selling products by Revenue
-
+```sql
 with cte as(
   select 
   productcode ,sum(quantityordered * priceeach) revenue_generated, row_number() over (order by sum(quantityordered * priceeach) desc) as ranking
@@ -99,9 +99,9 @@ from cte
 join products using(productcode) 
 where ranking<=3
 order by ranking;
-
+```
  11. Top 2 Customers who placed the highest number of orders yearly
-
+```sql
 with cte as (
   select 
   year(orderdate) as ordered_year, customernumber, 
@@ -113,9 +113,9 @@ with cte as (
 select ordered_year, customernumber, customername, no_of_orders_placed 
 from cte join customers using(customernumber)
 where ranking <= 2;
-
+```
  12.  Products with increasing sales trends
-
+```sql
 with cte as(
   select 
   year(orderdate) year_of_order, 
@@ -130,23 +130,23 @@ with cte as(
 select productcode, present_year_sale, next_year_sale 
 from cte2 
 where trend = "increasing" order by productcode;
-
+```
 13. Customers who have never placed an order.
-
+```sql
 select customernumber, customername 
 from customers 
 where customernumber not in 
 (select distinct customernumber from orders);
-
+```
 14. Orders that took more than the average shipping time 
-
+```sql
 select ordernumber, 
 datediff(shippeddate,orderdate) as shipping_Time 
 from orders 
 where datediff(shippeddate,orderdate) > (select avg(datediff(shippeddate,orderdate)) from orders);
-
+```
 15. Monthly revenue trend of the company
-
+```sql
 with cte as (
     select 
         year(orderdate) as year_of_order, 
@@ -162,17 +162,17 @@ select
     round(revenue) revenue, 
     round(sum(revenue) over (partition by year_of_order order by month_of_order)) as cumulative_revenue
 from cte;
-
+```
 16. Percentage contribution of each product to total-sales
-
+```sql
 select productcode, productname,
 sum(quantityOrdered* priceEach) revenue_generated, 
 round(sum(quantityOrdered* priceEach)/(select round(sum(quantityOrdered* priceEach)) total_sales from orderdetails) *100,3) percentage_of_total_sales
 from orderdetails join products using(productcode)
 group by productcode;
-
+```
 17.  Finding the top 5 customers contributing the most revenue each year
-
+```sql
 with cte as(
   select 
   year(orderdate) transaction_year, 
@@ -185,15 +185,15 @@ with cte as(
 select customername, transaction_year, revenue , ranking 
 from cte join customers using(customernumber)
 where ranking <= 5;
-
+```
 18. Total Orders and Sales for each productLine 
-
+```sql
 select productline, count(*) total_orders, sum(quantityOrdered * priceEach) total_sales
 from products join orderdetails using(productcode)
 group by productline;
-
+```
 19. Orders where the customer ordered more than their average order quantity 
-
+```sql
 select ordernumber, customernumber, sum(quantityOrdered) quantity_ordered
 from orders o join orderdetails od using(ordernumber)
 group by 1, 2
@@ -201,7 +201,7 @@ having quantity_ordered >
 (select sum(quantityordered)/count(distinct ordernumber)  avg_quantity
 from orders o1 join orderdetails od1 using(ordernumber)
 where o1.customernumber = o.customernumber);
-
+```
 Insights from Dashboard: -
 
 1. Total sale for the company stood to be $10 Million for the year 2003, 2004, 2005.
