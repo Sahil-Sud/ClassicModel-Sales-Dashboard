@@ -6,6 +6,7 @@ Aim: The goal of the capstone project is to design and implement a BI solution u
 3.	Build interactive dashboards and reports using PowerBI that can help the sales team and management make sense of the data.
 4.	Use SQL to perform advanced analytics on the data and extract insights that can help the company improve its sales.
 
+![](https://github.com/Sahil-Sud/ClassicModel-Sales-Dashboard/blob/main/Screenshot%202025-03-04%20134819.png)
 SQL Queries: - 
 
  1. Revenue from each product by product-code
